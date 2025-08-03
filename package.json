@@ -11,6 +11,11 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "nodemonConfig": {
+    "ignore": [
+      "endpoints.json"
+    ]
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",

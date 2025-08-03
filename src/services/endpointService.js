@@ -41,11 +41,10 @@ async function saveEndpoints() {
       "utf8"
     );
     console.log(`Saved ${endpoints.length} endpoints to ${ENDPOINTS_FILE}`);
-    // Emit an event to notify the server about endpoint changes
-    if (app) {
-      // Check if app is defined (it might not be during initial load)
-      app.emit("endpointsUpdated");
-    }
+    console.log(
+      "saveEndpoints: Endpoint file saved, checking for server restart implications..."
+    );
+    // The frontend will handle re-fetching endpoints, no server-side emit needed.
   } catch (error) {
     console.error("Error saving endpoints:", error);
     throw error;
@@ -87,7 +86,37 @@ async function deleteEndpoint(id) {
   return false;
 }
 
+/**
+ * Updates an existing endpoint by ID.
+ * @param {string} id - The ID of the endpoint to update.
+ * @param {Object} updatedData - An object with the data to update (e.g., { name, method, sql }).
+ * @returns {Object|null} The updated endpoint object or null if not found.
+ */
+async function updateEndpoint(id, updatedData) {
+  const endpointIndex = endpoints.findIndex((ep) => ep.id === id);
+
+  if (endpointIndex === -1) {
+    return null; // Endpoint not found
+  }
+
+  // Merge the updated data with the existing endpoint
+  const updatedEndpoint = {
+    ...endpoints[endpointIndex],
+    ...updatedData,
+  };
+
+  endpoints[endpointIndex] = updatedEndpoint;
+  await saveEndpoints();
+  return updatedEndpoint;
+}
+
 // Load endpoints when the module is imported
 loadEndpoints();
 
-export { loadEndpoints, getAllEndpoints, addEndpoint, deleteEndpoint };
+export {
+  loadEndpoints,
+  getAllEndpoints,
+  addEndpoint,
+  deleteEndpoint,
+  updateEndpoint,
+};

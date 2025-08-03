@@ -174,6 +174,37 @@
         </div>
     </div>
 
+    <!-- Modal de Edição de Endpoint -->
+    <div id="edit-endpoint-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-gray-800 w-full max-w-2xl rounded-lg shadow-xl p-8 border border-gray-700">
+            <h3 class="text-2xl font-bold mb-6 text-white">Editar Endpoint</h3>
+            <form id="edit-endpoint-form" class="space-y-4">
+                <input type="hidden" id="edit-endpoint-id">
+                <div>
+                    <label for="edit-endpoint-name" class="block text-sm font-medium text-gray-400">Nome do Endpoint</label>
+                    <input type="text" id="edit-endpoint-name" placeholder="ex: obtemProdutos" class="mt-1 block w-full bg-gray-900 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div>
+                    <label for="edit-endpoint-method" class="block text-sm font-medium text-gray-400">Método HTTP</label>
+                    <select id="edit-endpoint-method" class="mt-1 block w-full bg-gray-900 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <option>GET</option>
+                        <option>POST</option>
+                        <option>PUT</option>
+                        <option>DELETE</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="edit-endpoint-sql" class="block text-sm font-medium text-gray-400">SQL Query</label>
+                    <textarea id="edit-endpoint-sql" rows="6" placeholder="SELECT * FROM PRODUTOS" class="font-mono mt-1 block w-full bg-gray-900 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                </div>
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" id="close-edit-modal-btn" class="py-2 px-4 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors">Cancelar</button>
+                    <button type="submit" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal de Confirmação de Exclusão -->
     <div id="delete-confirm-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
         <div class="bg-gray-800 w-full max-w-md rounded-lg shadow-xl p-8 border border-gray-700">
@@ -221,7 +252,15 @@
 
             const createModal = document.getElementById('create-endpoint-modal');
             const createForm = document.getElementById('create-endpoint-form');
-            const closeModalBtn = document.getElementById('close-create-modal-btn');
+            const closeCreateModalBtn = document.getElementById('close-create-modal-btn');
+
+            const editModal = document.getElementById('edit-endpoint-modal');
+            const editForm = document.getElementById('edit-endpoint-form');
+            const closeEditModalBtn = document.getElementById('close-edit-modal-btn');
+            const editEndpointId = document.getElementById('edit-endpoint-id');
+            const editEndpointName = document.getElementById('edit-endpoint-name');
+            const editEndpointMethod = document.getElementById('edit-endpoint-method');
+            const editEndpointSql = document.getElementById('edit-endpoint-sql');
 
             const deleteModal = document.getElementById('delete-confirm-modal');
             const endpointToDeleteName = document.getElementById('endpoint-to-delete-name');
@@ -308,29 +347,31 @@
                                     <td class="px-6 py-4 whitespace-nowrap font-medium text-white">${ep.name}</td>
                                     <td class="px-6 py-4 whitespace-nowrap font-mono text-orange-400">/dynamic/${ep.name}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
-                                        <button data-testid="${ep.id}" class="test-btn text-blue-400 hover:text-blue-300 transition-colors">Testar</button>
-                                        <button data-deleteid="${ep.id}" data-deletename="${ep.name}" class="delete-btn text-red-500 hover:text-red-400 transition-colors">Excluir</button>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
+                                            <button data-testid="${ep.id}" class="test-btn text-blue-400 hover:text-blue-300 transition-colors">Testar</button>
+                                            <button data-editid="${ep.id}" class="edit-btn text-indigo-400 hover:text-indigo-300 transition-colors">Alterar</button>
+                                            <button data-deleteid="${ep.id}" data-deletename="${ep.name}" class="delete-btn text-red-500 hover:text-red-400 transition-colors">Excluir</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    
+                    document.querySelectorAll('.test-btn').forEach(btn => btn.addEventListener('click', (e) => handleTestEndpoint(e.target.dataset.testid)));
+                    document.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', (e) => openEditModal(e.target.dataset.editid)));
+                    document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => openDeleteModal(e.target.dataset.deleteid, e.target.dataset.deletename)));
+                };
                 
-                document.querySelectorAll('.test-btn').forEach(btn => btn.addEventListener('click', (e) => handleTestEndpoint(e.target.dataset.testid)));
-                document.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', (e) => openDeleteModal(e.target.dataset.deleteid, e.target.dataset.deletename)));
-            };
-            
-            const renderTestScreen = () => {
-                if (!state.selectedEndpoint) return;
-                const { method, name, sql } = state.selectedEndpoint;
-                testMethod.textContent = method;
-                testMethod.className = `method-tag method-${method.toLowerCase()}`;
-                testUrl.textContent = `/dynamic/${name}`;
-                testSql.textContent = sql;
-                responsePlaceholder.classList.remove('hidden');
-                responseContent.textContent = '';
-                copyResponseBtn.classList.add('hidden');
+                const renderTestScreen = () => {
+                    if (!state.selectedEndpoint) return;
+                    const { method, name, sql } = state.selectedEndpoint;
+                    testMethod.textContent = method;
+                    testMethod.className = `method-tag method-${method.toLowerCase()}`;
+                    testUrl.textContent = `/dynamic/${name}`;
+                    testSql.textContent = sql;
+                    responsePlaceholder.classList.remove('hidden');
+                    responseContent.textContent = '';
+                    copyResponseBtn.classList.add('hidden');
             };
 
             // --- Funções de Notificação ---
@@ -425,7 +466,7 @@
                     showNotification(error.message, 'error');
                 }
             };
-            
+
             const handleCreateEndpoint = async (e) => {
                 e.preventDefault();
                 const endpointData = {
@@ -433,7 +474,8 @@
                     method: document.getElementById('endpoint-method').value,
                     sql: document.getElementById('endpoint-sql').value,
                 };
-
+ 
+                console.log('handleCreateEndpoint: state before fetch:', JSON.stringify(state.dbConfig), state.currentScreen);
                 try {
                     const response = await fetch(`${API_BASE_URL}/api/endpoints`, {
                         method: 'POST',
@@ -447,12 +489,53 @@
                     createModal.classList.add('hidden');
                     createForm.reset();
                     await fetchEndpoints();
-
+                    console.log('handleCreateEndpoint: state after fetch:', JSON.stringify(state.dbConfig), state.currentScreen);
+ 
                 } catch (error) {
                     showNotification(`Erro ao criar: ${error.message}`, 'error');
                 }
             };
-
+ 
+            const openEditModal = (id) => {
+                state.selectedEndpoint = state.endpoints.find(ep => ep.id === id);
+                if (state.selectedEndpoint) {
+                    editEndpointId.value = state.selectedEndpoint.id;
+                    editEndpointName.value = state.selectedEndpoint.name;
+                    editEndpointMethod.value = state.selectedEndpoint.method;
+                    editEndpointSql.value = state.selectedEndpoint.sql;
+                    editModal.classList.remove('hidden');
+                }
+            };
+ 
+            const handleUpdateEndpoint = async (e) => {
+                e.preventDefault();
+                const id = editEndpointId.value;
+                const updatedData = {
+                    name: editEndpointName.value,
+                    method: editEndpointMethod.value,
+                    sql: editEndpointSql.value,
+                };
+ 
+                console.log('handleUpdateEndpoint: state before fetch:', JSON.stringify(state.dbConfig), state.currentScreen);
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/endpoints/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedData)
+                    });
+                    const data = await response.json();
+                    if (!response.ok) throw new Error(data.details || data.error);
+ 
+                    showNotification('Endpoint atualizado com sucesso!', 'success');
+                    editModal.classList.add('hidden');
+                    editForm.reset();
+                    await fetchEndpoints();
+                    console.log('handleUpdateEndpoint: state after fetch:', JSON.stringify(state.dbConfig), state.currentScreen);
+                } catch (error) {
+                    showNotification(`Erro ao atualizar: ${error.message}`, 'error');
+                }
+            };
+ 
             const openDeleteModal = (id, name) => {
                 state.endpointToDelete = id;
                 endpointToDeleteName.textContent = name;
@@ -461,17 +544,19 @@
             
             const handleDeleteEndpoint = async () => {
                 if (!state.endpointToDelete) return;
+                console.log('handleDeleteEndpoint: state before fetch:', JSON.stringify(state.dbConfig), state.currentScreen);
                 try {
                     const response = await fetch(`${API_BASE_URL}/api/endpoints/${state.endpointToDelete}`, {
                         method: 'DELETE'
                     });
                     const data = await response.json();
                     if (!response.ok) throw new Error(data.error);
-
+ 
                     showNotification('Endpoint excluído com sucesso!', 'success');
                     deleteModal.classList.add('hidden');
                     state.endpointToDelete = null;
                     await fetchEndpoints();
+                    console.log('handleDeleteEndpoint: state after fetch:', JSON.stringify(state.dbConfig), state.currentScreen);
                 } catch (error) {
                     showNotification(`Erro ao excluir: ${error.message}`, 'error');
                 }
@@ -539,7 +624,7 @@
             connectForm.addEventListener('submit', handleConnectFormSubmit);
             
             openCreateModalBtn.addEventListener('click', () => createModal.classList.remove('hidden'));
-            closeModalBtn.addEventListener('click', () => createModal.classList.add('hidden'));
+            closeCreateModalBtn.addEventListener('click', () => createModal.classList.add('hidden'));
             createForm.addEventListener('submit', handleCreateEndpoint);
 
             cancelDeleteBtn.addEventListener('click', () => deleteModal.classList.add('hidden'));
