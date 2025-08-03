@@ -129,6 +129,53 @@ Configure database at http://localhost:3000/api/config/connect
 Manage endpoints at http://localhost:3000/api/endpoints
 ```
 
+## Testando com Postman
+
+Uma coleção Postman e um ambiente prontos para uso são fornecidos no diretório [`docs/postman-collection`](docs/postman-collection) para facilitar o teste da API.
+
+### Importando a Coleção e o Ambiente
+
+Siga estas etapas para importar a coleção e o ambiente para o Postman:
+
+1.  **Baixe os arquivos:** Certifique-se de ter os seguintes arquivos do repositório:
+    *   [`docs/postman-collection/postman_collection.json`](docs/postman-collection/postman_collection.json)
+    *   [`docs/postman-collection/postman_environment.json`](docs/postman-collection/postman_environment.json)
+
+2.  **Abra o Postman:** Inicie o aplicativo Postman.
+
+3.  **Importar Coleção:**
+    *   Clique em `File` (Arquivo) > `Import` (Importar) ou no botão `Import` no canto superior esquerdo.
+    *   Na caixa de diálogo `Import`, selecione a aba `Files` (Arquivos) e clique em `Upload Files` (Carregar Arquivos).
+    *   Navegue até o diretório [`docs/postman-collection`](docs/postman-collection) e selecione o arquivo `postman_collection.json`.
+    *   Clique em `Open` (Abrir) e, em seguida, em `Import` (Importar). A coleção `Dynamic SQL API Server` aparecerá na sua barra lateral esquerda.
+
+4.  **Importar Ambiente:**
+    *   Repita o processo de importação: Clique em `File` (Arquivo) > `Import` (Importar).
+    *   Selecione a aba `Files` (Arquivos) e clique em `Upload Files` (Carregar Arquivos).
+    *   Navegue até o diretório [`docs/postman-collection`](docs/postman-collection) e selecione o arquivo `postman_environment.json`.
+    *   Clique em `Open` (Abrir) e, em seguida, em `Import` (Importar). O ambiente `Dynamic SQL API Environment` aparecerá na sua lista de ambientes.
+
+### Configurando o Ambiente
+
+O ambiente Postman inclui variáveis para as credenciais do banco de dados e a URL base do servidor. Você **DEVE** atualizar a `CURRENT VALUE` (Valor Atual) para suas credenciais reais do banco de dados.
+
+1.  **Selecione o Ambiente:** No canto superior direito do Postman, selecione `Dynamic SQL API Environment` no menu suspenso de ambientes.
+
+2.  **Edite as Variáveis de Ambiente:**
+    *   Clique no ícone de `eye` (olho) ao lado do menu suspenso de ambientes para visualizar as variáveis.
+    *   Clique em `Edit` (Editar) para abrir a interface de edição de variáveis.
+    *   Atualize a coluna `CURRENT VALUE` para as seguintes variáveis com seus detalhes reais do banco de dados Firebird (correspondendo ao seu arquivo `.env`):
+        *   `dbHost`
+        *   `dbPort`
+        *   `dbUser`
+        *   `dbPassword`
+        *   `dbDatabase`
+    *   **Importante:** Deixe a coluna `INITIAL VALUE` (Valor Inicial) como está. Altere apenas a `CURRENT VALUE`.
+    *   A variável `baseUrl` já deve estar configurada para `http://localhost:3000`. Se o seu servidor estiver rodando em uma porta diferente, atualize-a aqui.
+    *   Clique em `Save` (Salvar) para aplicar as alterações.
+
+Agora você pode usar as requisições na coleção `Dynamic SQL API Server` para interagir com a sua instância do servidor Node.js.
+
 ## Endpoints da API
 
 O servidor expõe duas categorias principais de endpoints de API: **API de Gerenciamento** e **API Dinâmica**.

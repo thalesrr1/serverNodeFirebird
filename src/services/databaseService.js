@@ -1,5 +1,5 @@
 import knex from "knex";
-import knexFirebirdDialect from "knex-firebird-dialect";
+import FirebirdClient from "knex-firebird-dialect";
 
 let dbInstance = null;
 let currentDbConfig = null;
@@ -23,7 +23,7 @@ async function initializeDatabase(config) {
   }
 
   currentDbConfig = {
-    client: knexFirebirdDialect,
+    client: FirebirdClient,
     connection: {
       host: config.host,
       port: config.port,

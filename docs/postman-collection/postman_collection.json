@@ -1,0 +1,473 @@
+{
+    "info": {
+        "_postman_id": "YOUR_COLLECTION_ID",
+        "name": "Firebird Dynamic SQL API Server",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "YOUR_EXPORTER_ID"
+    },
+    "variables": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Configuration",
+            "item": [
+                {
+                    "name": "Connect Database",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"host\": \"{{dbHost}}\",\n    \"port\": {{dbPort}},\n    \"username\": \"{{dbUsername}}\",\n    \"password\": \"{{dbPassword}}\",\n    \"database\": \"{{dbPath}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/config/connect",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "config",
+                                "connect"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Connect Database Success",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"host\": \"localhost\",\n    \"port\": 3050,\n    \"username\": \"SYSDBA\",\n    \"password\": \"masterkey\",\n    \"database\": \"C:/path/to/your/database.fdb\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/config/connect",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "config",
+                                        "connect"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"message\": \"Database connected successfully.\",\n    \"config\": {\n        \"host\": \"localhost\",\n        \"port\": 3050,\n        \"username\": \"SYSDBA\",\n        \"database\": \"C:/path/to/your/database.fdb\"\n    }\n}"
+                        }
+                    ],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test(\"Response has message and config\", function () {",
+                                    "    const responseJson = pm.response.json();",
+                                    "    pm.expect(responseJson.message).to.eql(\"Database connected successfully.\");",
+                                    "    pm.expect(responseJson.config).to.have.property('host');",
+                                    "    pm.expect(responseJson.config).to.have.property('port');",
+                                    "    pm.expect(responseJson.config).to.have.property('username');",
+                                    "    pm.expect(responseJson.config).to.have.property('database');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Current Database Config",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/config/current",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "config",
+                                "current"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Get Current Database Config Success",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/config/current",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "config",
+                                        "current"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"config\": {\n        \"host\": \"localhost\",\n        \"port\": 3050,\n        \"username\": \"SYSDBA\",\n        \"database\": \"C:/path/to/your/database.fdb\"\n    }\n}"
+                        }
+                    ],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test(\"Response has config object\", function () {",
+                                    "    const responseJson = pm.response.json();",
+                                    "    pm.expect(responseJson.config).to.have.property('host');",
+                                    "    pm.expect(responseJson.config).to.have.property('port');",
+                                    "    pm.expect(responseJson.config).to.have.property('username');",
+                                    "    pm.expect(responseJson.config).to.have.property('database');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Endpoint Management",
+            "item": [
+                {
+                    "name": "Create Endpoint",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"testEndpoint\",\n    \"method\": \"GET\",\n    \"sql\": \"SELECT * FROM RDB$RELATIONS\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/endpoints",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "endpoints"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Create Endpoint Success",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"name\": \"testEndpoint\",\n    \"method\": \"GET\",\n    \"sql\": \"SELECT * FROM RDB$RELATIONS\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/endpoints",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "endpoints"
+                                    ]
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"message\": \"Endpoint created successfully.\",\n    \"endpoint\": {\n        \"id\": \"1678888888888\",\n        \"name\": \"testEndpoint\",\n        \"method\": \"GET\",\n        \"sql\": \"SELECT * FROM RDB$RELATIONS\"\n    }\n}"
+                        }
+                    ],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "pm.test(\"Response has endpoint object with ID\", function () {",
+                                    "    const responseJson = pm.response.json();",
+                                    "    pm.expect(responseJson.endpoint).to.have.property('id');",
+                                    "    pm.expect(responseJson.endpoint).to.have.property('name', 'testEndpoint');",
+                                    "    pm.expect(responseJson.endpoint).to.have.property('method', 'GET');",
+                                    "    pm.expect(responseJson.endpoint).to.have.property('sql', 'SELECT * FROM RDB$RELATIONS');",
+                                    "});",
+                                    "const responseJson = pm.response.json();",
+                                    "pm.environment.set(\"endpointId\", responseJson.endpoint.id);",
+                                    "pm.environment.set(\"endpointName\", responseJson.endpoint.name);"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Get All Endpoints",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/endpoints",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "endpoints"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Get All Endpoints Success",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/endpoints",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "endpoints"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "[\n    {\n        \"id\": \"1678888888888\",\n        \"name\": \"testEndpoint\",\n        \"method\": \"GET\",\n        \"sql\": \"SELECT * FROM RDB$RELATIONS\"\n    }\n]"
+                        }
+                    ],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test(\"Response is an array\", function () {",
+                                    "    pm.expect(pm.response.json()).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Array contains at least one endpoint\", function () {",
+                                    "    const responseJson = pm.response.json();",
+                                    "    pm.expect(responseJson.length).to.be.at.least(1);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Endpoint by ID",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/endpoints/{{endpointId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "endpoints",
+                                "{{endpointId}}"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Delete Endpoint Success",
+                            "originalRequest": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/endpoints/1678888888888",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "api",
+                                        "endpoints",
+                                        "1678888888888"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n    \"message\": \"Endpoint deleted successfully.\"\n}"
+                        }
+                    ],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test(\"Response has success message\", function () {",
+                                    "    const responseJson = pm.response.json();",
+                                    "    pm.expect(responseJson.message).to.eql(\"Endpoint deleted successfully.\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Dynamic Endpoints",
+            "item": [
+                {
+                    "name": "Sample Dynamic Endpoint (GET /dynamic/testEndpoint)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{baseUrl}}/dynamic/{{endpointName}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "dynamic",
+                                "{{endpointName}}"
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Sample Dynamic Endpoint Success",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{baseUrl}}/dynamic/testEndpoint",
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "path": [
+                                        "dynamic",
+                                        "testEndpoint"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json; charset=utf-8"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "[\n    {\n        \"RDB$RELATION_ID\": 1,\n        \"RDB$RELATION_NAME\": \"RDB$PAGES\",\n        \"RDB$SYSTEM_FLAG\": 1\n    }\n]"
+                        }
+                    ],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "pm.test(\"Response is an array\", function () {",
+                                    "    pm.expect(pm.response.json()).to.be.an('array');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
