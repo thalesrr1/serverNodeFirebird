@@ -1,5 +1,4 @@
 
-
 # **Relatório Técnico: Padrões de Projeto e Implementação com node-firebird-driver-native**
 
 ## **Seção 1: Análise do Ecossistema node-firebird-driver-native**
