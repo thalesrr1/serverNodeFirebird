@@ -32,10 +32,13 @@ export const initializeDynamicRoutes = async (app) => {
     dynamicRouter[method.toLowerCase()](routePath, async (req, res) => {
       try {
         const db = getDatabase();
+
+        const executableSql = sql.replace(/(\r\n|\n|\r)/gm, " ");
+
         // Execute the raw SQL query.
         // Parameters from request body/query could be passed here,
         // but for now, the SQL is directly from the stored definition.
-        const result = await db.raw(sql);
+        const result = await db.raw(executableSql);
         res.status(200).json(result);
       } catch (error) {
         console.error(

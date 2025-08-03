@@ -627,6 +627,9 @@
             closeCreateModalBtn.addEventListener('click', () => createModal.classList.add('hidden'));
             createForm.addEventListener('submit', handleCreateEndpoint);
 
+            closeEditModalBtn.addEventListener('click', () => editModal.classList.add('hidden'));
+            editForm.addEventListener('submit', handleUpdateEndpoint);
+ 
             cancelDeleteBtn.addEventListener('click', () => deleteModal.classList.add('hidden'));
             confirmDeleteBtn.addEventListener('click', handleDeleteEndpoint);
             
