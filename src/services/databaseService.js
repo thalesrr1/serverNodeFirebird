@@ -23,7 +23,7 @@ async function initializeDatabase(config) {
   }
 
   currentDbConfig = {
-    client: "firebird",
+    client: FirebirdClient.default,
     connection: {
       host: config.host,
       port: config.port,
