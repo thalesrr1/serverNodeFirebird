@@ -1,8 +1,8 @@
-# Servidor API SQL Dinâmico para Firebird
+# FeatherRoute - Servidor API SQL Dinâmico para Firebird
 
 ## Visão Geral do Projeto
 
-Este projeto implementa uma aplicação de servidor Node.js leve projetada para se conectar a um banco de dados Firebird (versões 3.0, 4.0 e 5.0 em ambientes Windows). Ele permite que os usuários criem e gerenciem dinamicamente endpoints de API HTTP personalizados que executam comandos SQL sob demanda e retornam os resultados em formato JSON.
+O FeatherRoute implementa uma aplicação de servidor Node.js leve projetada para se conectar a um banco de dados Firebird (versões 3.0, 4.0 e 5.0 em ambientes Windows). Ele permite que os usuários criem e gerenciem dinamicamente endpoints de API HTTP personalizados que executam comandos SQL sob demanda e retornam os resultados em formato JSON.
 
 O objetivo principal é fornecer uma camada flexível de API REST sobre um banco de dados Firebird, permitindo que aplicações externas (por exemplo, Postman, outros microsserviços ou frontends personalizados) interajam com o banco de dados usando consultas SQL definidas pelo usuário, expostas através de rotas HTTP simples.
 
@@ -375,4 +375,18 @@ Sinta-se à vontade para fazer um fork do repositório, abrir issues ou enviar p
 
 ## Licença
 
-Licença ISC.
+Licença ISC
+
+Copyright (c) [2025] [FeatherRoute]
+
+Permissão para usar, copiar, modificar e/ou distribuir este software para qualquer
+finalidade com ou sem taxa é concedida, desde que o acima
+o aviso de direitos autorais e esta permissão aparecem em todas as cópias.
+
+O SOFTWARE É FORNECIDO "NO ESTADO EM QUE SE ENCONTRA" E O AUTOR SE ISENTA DE TODAS AS GARANTIAS COM
+EM RELAÇÃO A ESTE SOFTWARE, INCLUINDO TODAS AS GARANTIAS IMPLÍCITAS DE COMERCIALIZAÇÃO
+E ADEQUAÇÃO. EM NENHUMA HIPÓTESE O AUTOR SERÁ RESPONSÁVEL POR QUAISQUER DANOS ESPECIAIS, DIRETOS,
+DANOS INDIRETOS OU CONSEQUENCIAIS OU QUAISQUER DANOS RESULTANTES DE
+PERDA DE USO, DADOS OU LUCROS, SEJA EM UMA AÇÃO DE CONTRATO, NEGLIGÊNCIA OU
+OUTRAS AÇÕES ILÍCITAS, DECORRENTES DE OU EM CONEXÃO COM O USO OU
+DESEMPENHO DESTE SOFTWARE.
